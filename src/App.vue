@@ -2,18 +2,23 @@
 import { closeToast, showToast } from "vant";
 import { ref } from "vue";
 
-const showPopup = ref(false);
+const isShowPopup = ref(false);
 
-const popup = () => {
+const onClickPopup = () => {
   console.log("click show popup");
-  showPopup.value = true;
+  const toast = document.querySelector(".van-toast");
+  if (toast) {
+    console.log("toast display", getComputedStyle(toast).display);
+  }
+  isShowPopup.value = true;
 };
 
-const toast = async () => {
+const onClickToast = async () => {
   showToast({
     duration: 0,
     forbidClick: true,
     message: "Loading...",
+    // 此处设置none的原因是不需要过渡效果，因此传none覆盖掉vant原有的默认过渡
     transition: "none",
   });
 
@@ -24,17 +29,17 @@ const toast = async () => {
 </script>
 
 <template>
-  <van-button @click="toast">show toast</van-button>
+  <van-button @click="onClickToast">show toast</van-button>
 
-  <van-button @touchstart="popup">show popup</van-button>
+  <van-button @touchstart="onClickPopup">show popup</van-button>
 
   <van-popup
-    v-model:show="showPopup"
+    v-model:show="isShowPopup"
     title="Terms"
     position="bottom"
     round
     :close-on-click-overlay="false"
-    transition="none"
+    transition=""
     closeable
     :style="{ height: '30%' }"
   >
